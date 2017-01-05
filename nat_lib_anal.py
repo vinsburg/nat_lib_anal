@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
-import itertools
+# import itertools
 import json
-import sys
-import os
+# import sys
+# import os
 # from collections import OrderedDict
 from lib.csv_printer import *
+from lib.unidate import *
+from lib.diagnostics import *
 
 
 def _serialize_json(data):
@@ -22,13 +24,23 @@ class Archive(object):
         with open(file_name, "r", encoding='utf-8', errors='ignore') as csv_file:
             for row in csv.reader(csv_file, dialect='excel'):
                 data.append(row)
-        # pop the titles of the columns , we don't need those, maybe later :)
-        self.header = data.pop(0)
+        self.worksheet['header'] = data.pop(0)
+        self.worksheet['data'] = {}
         for line in data:
-            self.worksheet[line[0]] = {}
+            self.worksheet['data'][line[0]] = {}
             for item_ind, item in enumerate(line):
-                self.worksheet[line[0]][self.header[item_ind]] = item
-        # self._precalculate_all()
+                self.worksheet['data'][line[0]][self.worksheet['header'][item_ind]] = item
+                self.worksheet['data'][line[0]]['unidate'] = None
+        self.worksheet['header'].append('unidate')
+        self._fix_unidates()
+
+    def _fix_unidates(self):
+        for entry in self.worksheet['data'].values():
+            if entry['unidate'] is None:
+                # self.worksheet['data'][entry['msID']] = fix_unidate(entry)
+                _ = fix_unidate(entry)
+            pass
+        pass
 
     def _serialize(self, output="csv"):
         result = {
@@ -49,10 +61,19 @@ class Archive(object):
     #     make_csv_from_line_matrix(csv_line_matrix, output_filename)
 
 if __name__ == "__main__":
-    filenames = sys.argv
-    filenames.pop(0)
-    # filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/heb_dates.csv']
+    # filenames = sys.argv
+    # filenames.pop(0)
+    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/heb_dates.csv']
     for filename in filenames:
         print(filename)
         archive = Archive(filename)
-        print(_serialize_json(archive.worksheet))
+        # print(_serialize_json(archive.worksheet))
+        # for field in archive.worksheet:
+        for key in archive.worksheet['data']['3530522'].items():
+            print(key)
+        entries = get_date_types(archive.worksheet)
+        print('accuracyType', entries['accuracyType'])
+        print('yearType', entries['yearType'])
+        print('referenceType', entries['referenceType'])
+        print_date_coverage(archive.worksheet['data'])
+        # print_unidates(archive.worksheet['data'])
