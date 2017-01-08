@@ -76,4 +76,6 @@ if __name__ == "__main__":
         print('yearType', entries['yearType'])
         print('referenceType', entries['referenceType'])
         print_date_coverage(archive.worksheet['data'])
-        # print_unidates(archive.worksheet['data'])
+        print_unidates(archive.worksheet['data'])
+        # print('\u05ea\u05ea\u05ea\u05f2\u05ea')
+

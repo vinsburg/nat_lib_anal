@@ -1,30 +1,80 @@
-from re import match
+from re import search
+from re import sub
+
+
+class UnidateRE:
+    def __init__(self):
+        self.range_delimiters = r'[\-/\\]'
+        self.lat_dmy_delimiters = r'\.\\/'
+        self.lat_day = self.lat_month = r'\d{1-2}'
+        self.lat_century = r'\d{1,2}'
+        self.lat_century_range = self.date_range(self.lat_century)
+        self.lat_dates = ['' for _ in range(3)]
+        self.lat_dates[2] = self.lat_year = r'\d{4}'
+        self.lat_dates[1] = self.lat_month_year = self.lat_month+self.lat_dmy_delimiters+self.lat_year
+        self.lat_dates[0] = self.lat_day_month_year = self.lat_day + self.lat_dmy_delimiters + self.lat_month_year
+        self.general_lat_year_range = r'('+r')|('.join(map(self.date_range, self.lat_dates))+r')'
+        self.heb_year = r'[\u05d0-\u05ea]["\u05f2-\u05f4]{0,2}[\u05d0-\u05ea]{1,3}'
+        self.heb_year_range = self.date_range(self.heb_year)
+        self.heb_century = r'[\u05d0-\u05ea]{1,2}'
+        self.heb_century_range = self.date_range(self.heb_century)
+
+    def date_range(self, date):
+        return r'(' + date + self.range_delimiters + r')?' + date
 
 
 def fix_unidate(entry):
     if entry['yearType'] == 'Year':
-        entry['unidate'] = get_latDate(entry)
+        entry['unidate'] = get_year_unidates(entry)
+    if entry['yearType'] == 'Century':
+        entry['unidate'] = get_century_unidates(entry)
 
 
-def get_latDate(entry):
-    if valid_latDate(entry['latDate']):
-        return entry['latDate']
-    else:
-        print(entry['latDate'])
-    return None
 
-def valid_latDate(date):
-    date_range = lambda x: r'^('+x+r'-)?'+x+r'$'
-    year = r'\d{4}'
-    day = month = r'\d{1,2}\.'
-    regex = date_range(year)+r'|'+date_range(month+year)+r'|'+date_range(day+month+year)
-    # regex = year
-    result = match(regex, date) is not None
-    return result
+def get_year_unidates(entry):
+    regex = UnidateRE()
+    lat_year_date_list = date_getter(regex.general_lat_year_range, entry['latDate'])
+    lat_year_date_list += date_getter(regex.general_lat_year_range, entry['hebDate'])
+    # print(lat_year_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
+    return ', '.join(lat_year_date_list)
+
+
+def get_century_unidates(entry):
+    regex = UnidateRE()
+    lat_century_date_list = date_getter(regex.lat_century_range, entry['latDate'])
+    # lat_century_date_list += date_getter(regex.lat_century_range, entry['hebDate'])
+    lat_year_date_list = lat_cent2year(regex.lat_century, lat_century_date_list)
+    # print(lat_year_date_list, lat_century_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
+    return ', '.join(lat_year_date_list)
+
+
+def date_getter(regex_pattern, date_string):
+    clean_date_string = sub(r'[\[\]]', '', date_string)
+    date_list = list()
+    while True:
+        date_match = search(regex_pattern, clean_date_string)
+        if date_match:
+            start_ind, end_ind = date_match.span()
+            date_list.append(clean_date_string[start_ind:end_ind])
+            clean_date_string = clean_date_string[end_ind:]
+        else:
+            break
+    return date_list
+
+
+def lat_cent2year(regex_pattern, century_date_list):
+    year_date_list = list()
+    for item in century_date_list:
+        year_date_list.append(sub(regex_pattern, lambda x: str((int(x.group(0)) - 1) * 100), item))
+    return year_date_list
+
+
+
+
 
 '''
-hebrew codes next
-print('\u05d0','\u05ea')
+hebrew code indexes next
 print(list(map(chr, range(1488, 1514 + 1))))
-
+1488 - א
+1514 - ת
 '''
