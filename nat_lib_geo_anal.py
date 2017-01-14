@@ -6,7 +6,7 @@ import json
 import os
 # from collections import OrderedDict
 from lib.csv_printer import *
-from lib.unidate import *
+from lib.geodata import *
 from lib.diagnostics import *
 
 
@@ -30,16 +30,18 @@ class Archive(object):
             self.worksheet['data'][line[0]] = {}
             for item_ind, item in enumerate(line):
                 self.worksheet['data'][line[0]][self.worksheet['header'][item_ind]] = item
-                self.worksheet['data'][line[0]]['unidate'] = None
-        self.worksheet['header'].append('unidate')
-        self._fix_unidates()
-        self._serialize(output="csv")
+                self.worksheet['data'][line[0]]['lat'] = None
+                self.worksheet['data'][line[0]]['lon'] = None
+        self.worksheet['header'].append('lat')
+        self.worksheet['header'].append('lon')
+        # self._fix_unidates()
+        # self._serialize(output="csv")
 
-    def _fix_unidates(self):
+    def _get_coordinates(self):
         for entry in self.worksheet['data'].values():
-            if entry['unidate'] is None:
+            if entry['lat'] and entry['lon'] is None:
                 # self.worksheet['data'][entry['msID']] = fix_unidate(entry)
-                _ = fix_unidate(entry)
+                _ = get_coordinate(entry)
 
     def _serialize(self, output="csv"):
         result = {
@@ -58,19 +60,11 @@ class Archive(object):
 if __name__ == "__main__":
     # filenames = sys.argv
     # filenames.pop(0)
-    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/heb_dates.csv']
+    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/locations.csv']
     for filename in filenames:
         print(filename)
         archive = Archive(filename)
-        # print(_serialize_json(archive.worksheet))
-        # for field in archive.worksheet:
-        for key in archive.worksheet['data']['3530522'].items():
-            print(key)
-        entries = get_date_types(archive.worksheet)
-        print('accuracyType', entries['accuracyType'])
-        print('yearType', entries['yearType'])
-        print('referenceType', entries['referenceType'])
-        print_date_coverage(archive.worksheet['data'])
+        print(_serialize_json(archive.worksheet))
         # print_unidates(archive.worksheet['data'])
-        # print('\u05ea\u05ea\u05ea\u05f2\u05ea')
+
 

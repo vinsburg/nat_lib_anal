@@ -32,8 +32,8 @@ class Archive(object):
                 self.worksheet['data'][line[0]][self.worksheet['header'][item_ind]] = item
                 self.worksheet['data'][line[0]]['unidate'] = None
         self.worksheet['header'].append('unidate')
-        # self._fix_unidates()
-        # self._serialize(output="csv")
+        self._fix_unidates()
+        self._serialize(output="csv")
 
     def _fix_unidates(self):
         for entry in self.worksheet['data'].values():
