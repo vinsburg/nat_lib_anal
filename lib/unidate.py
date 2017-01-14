@@ -75,6 +75,9 @@ def lat_cent2year(regex_pattern, century_date_list):
 def get_shtarot_unidates(entry):
     regex = UnidateRE()
     lat_shtarot_date_list = date_getter(regex.general_lat_year_range, entry['latDate'])
+    lat_shtarot_date_list += date_getter(regex.general_lat_year_range, entry['hebDate'])
+    if lat_shtarot_date_list is '':
+        return None
     return ', '.join(lat_shtarot_date_list)
 
 

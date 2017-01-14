@@ -3,7 +3,7 @@
 # import itertools
 import json
 # import sys
-# import os
+import os
 # from collections import OrderedDict
 from lib.csv_printer import *
 from lib.unidate import *
@@ -33,14 +33,13 @@ class Archive(object):
                 self.worksheet['data'][line[0]]['unidate'] = None
         self.worksheet['header'].append('unidate')
         self._fix_unidates()
+        self._serialize(output="csv")
 
     def _fix_unidates(self):
         for entry in self.worksheet['data'].values():
             if entry['unidate'] is None:
                 # self.worksheet['data'][entry['msID']] = fix_unidate(entry)
                 _ = fix_unidate(entry)
-            pass
-        pass
 
     def _serialize(self, output="csv"):
         result = {
@@ -51,14 +50,10 @@ class Archive(object):
 
     def _serialize_csv(self, data):
         pass
-    #     output_dirname, output_filename = os.path.split(self.worksheet['file_name'])
-    #     output_filename = "/".join([output_dirname, "outputs", output_filename])
+        output_dirname, output_filename = os.path.split(self.worksheet['file_name'])
+        output_filename = "/".join([output_dirname, "outputs", output_filename])
     #     print(output_filename)
-    #     csv_line_list = students_per_category_line_list_constructor(self.worksheet['students_per_category'])
-    #     csv_line_list += ['\#\#']  # this will indicate the csv_line_matrix method to add a blank line
-    #     csv_line_list += students_line_list_constructor(self.worksheet)
-    #     csv_line_matrix = make_csv_line_matrix(csv_line_list)
-    #     make_csv_from_line_matrix(csv_line_matrix, output_filename)
+        print_csv_object(output_filename, self.worksheet)
 
 if __name__ == "__main__":
     # filenames = sys.argv

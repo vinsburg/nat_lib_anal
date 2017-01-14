@@ -1,20 +1,21 @@
 # !/usr/bin/env python
 import csv
 
-def make_csv_line_matrix(line_list):
-    line_matrix = [[]]
-    matrix_row_index = 0
-    for string_cell in line_list:
-        if string_cell != '\#\#':
-            line_matrix[matrix_row_index] += [string_cell]
-        else:
-            line_matrix += [[]]
-            matrix_row_index += 1
-    return line_matrix
+
+def make_csv_object(worksheet):
+    csv_object = [[]]
+    csv_object[0] += worksheet['header']
+    current_row_index = 0
+    for entry in worksheet['data'].values():
+        current_row_index += 1
+        csv_object += [[]]
+        for key in worksheet['header']:
+            csv_object[current_row_index] += [entry[key]]
+    print(csv_object[1])
+    return csv_object
 
 
-def make_csv_from_line_matrix(line_matrix, output_filename):
-    with open(output_filename, 'w', newline='') as csvfile:
+def print_csv_object(output_filename, worksheet):
+    with open(output_filename, 'w', newline='', encoding='utf-8') as csvfile:
         csvwriter = csv.writer(csvfile, dialect='excel')
-        for line in line_matrix:
-            csvwriter.writerow(line)
+        csvwriter.writerows(make_csv_object(worksheet))
