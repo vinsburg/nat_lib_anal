@@ -12,8 +12,11 @@ def get_coordinate(entry):
     # print(entry['msID'], city + ' ' + country)
     while True:
         try:
-            location = geolocator.geocode(' '.join((city,country)))
-            sleep(1)
+            if city is not '' or country is not '':
+                location = geolocator.geocode(' '.join((city, country)))
+                sleep(1)
+            else:
+                location = None
             break
         except exc.GeocoderServiceError:
             return True
