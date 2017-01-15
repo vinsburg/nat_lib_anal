@@ -30,8 +30,8 @@ def fix_unidate(entry):
         entry['unidate'] = get_century_unidates(entry)
     if entry['yearType'] == 'Shtarot':
         entry['unidate'] = get_year_unidates(entry)
-    if entry['unidate'] is None:
-        print_date_info(entry)
+    # if entry['unidate'] is None:
+    #     print_date_info(entry)
 
 
 def get_year_unidates(entry):

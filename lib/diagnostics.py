@@ -11,15 +11,15 @@ def get_date_types(worksheet):
     return field_entries
 
 
-def print_date_coverage(data):
-    unidate_counter = 0
+def print_coverage_for_key(data,key):
+    key_counter = 0
     entry_counter = 0
     for entry in data.values():
         entry_counter += 1
-        if entry['unidate'] is not None:
-            unidate_counter += 1
-    print('unidate coverage is', '{:.1%}'.format(unidate_counter/entry_counter))
-    print(unidate_counter, 'entries out of', entry_counter, 'now conform.')
+        if entry[key] is not None:
+            key_counter += 1
+    print(key, 'coverage is', '{:.1%}'.format(key_counter/entry_counter))
+    print(key_counter, 'entries out of', entry_counter, 'now conform.')
 
 
 def print_unidates(data):
