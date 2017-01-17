@@ -18,8 +18,10 @@ def make_csv_object(worksheet):
 
 
 def print_csv_object(output_filename, worksheet):
-    with open(output_filename, 'w', newline='', encoding='utf-8') as csvfile:
-        csvwriter = csv.writer(csvfile, dialect='excel')
+    # with open(output_filename, 'w', newline='', encoding='utf-8') as csvfile:
+    #     csvwriter = csv.writer(csvfile, dialect='excel')
+    with open(output_filename, 'w', newline='', encoding='utf-8', errors='ignore') as csv_file:
+        csvwriter = csv.writer(csv_file, delimiter='\t', quotechar='"')
         csvwriter.writerows(make_csv_object(worksheet))
 
 

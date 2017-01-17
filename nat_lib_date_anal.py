@@ -55,7 +55,7 @@ if __name__ == "__main__":
         # print('accuracyType', entries['accuracyType'])
         # print('yearType', entries['yearType'])
         # print('referenceType', entries['referenceType'])
-        # print_coverage_for_key(archive.worksheet['data'], 'unidate')
-        # print_unidates(archive.worksheet['data'])
+        print_coverage_for_key(archive.worksheet['data'], 'unidate')
+        print_unidates(archive.worksheet['data'])
         # print('\u05ea\u05ea\u05ea\u05f2\u05ea')
 

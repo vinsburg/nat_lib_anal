@@ -14,7 +14,7 @@ def get_coordinate(entry):
         try:
             if city is not '' or country is not '':
                 location = geolocator.geocode(' '.join((city, country)))
-                sleep(1)
+                sleep(2)
             else:
                 location = None
             break

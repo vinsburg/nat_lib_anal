@@ -31,7 +31,7 @@ def fix_unidate(entry):
     if entry['yearType'] == 'Shtarot':
         entry['unidate'] = get_year_unidates(entry)
     # if entry['unidate'] is None:
-    #     print_date_info(entry)
+        # print_date_info(entry)
 
 
 def get_year_unidates(entry):
@@ -44,10 +44,12 @@ def get_year_unidates(entry):
 
 def get_century_unidates(entry):
     regex = UnidateRE()
-    lat_century_date_list = date_getter(regex.lat_century_range, entry['latDate'])
-    # lat_century_date_list += date_getter(regex.lat_century_range, entry['hebDate'])
-    lat_year_date_list = lat_cent2year(regex.lat_century, lat_century_date_list)
-    # print(lat_year_date_list, lat_century_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
+    lat_year_date_list = date_getter(regex.general_lat_year_range, entry['latDate'])
+    if lat_year_date_list == []:
+        lat_century_date_list = date_getter(regex.lat_century_range, entry['latDate'])
+        # lat_century_date_list += date_getter(regex.lat_century_range, entry['hebDate'])
+        lat_year_date_list = lat_cent2year(regex.lat_century, lat_century_date_list)
+        # print(lat_year_date_list, lat_century_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
     return ', '.join(lat_year_date_list)
 
 
