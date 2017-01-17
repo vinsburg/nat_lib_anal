@@ -23,7 +23,14 @@ class Archive(object):
             for row in csv.reader(csv_file, delimiter='\t', quotechar='"'):
                 self.worksheet['header'] = row
                 break
+        self.worksheet['header'].append('locationType')
+        self.worksheet['header'].append('lat')
+        self.worksheet['header'].append('lon')
+        self.worksheet['header'].append('address')
+        # print(self.worksheet['header'])
         self.worksheet['data'] = {}
+        self.key_dic = {}
+        self.key_length = 0
         self.read_file_to_archive(file_name)
 
     def read_file_to_archive(self, file_name):
@@ -32,27 +39,28 @@ class Archive(object):
         with open(file_name, "r", encoding='utf-8', newline='', errors='ignore') as csv_file:
             for row in csv.reader(csv_file, delimiter='\t', quotechar='"'):
                 data.append(row)
-        data.pop(0)
-        # self.worksheet['header'] = data.pop(0)
-        # self.worksheet['header'].append('lat')
-        # self.worksheet['header'].append('lon')
-        # self.worksheet['header'].append('address')
-        # print(self.worksheet['header'])
+        data.pop(0)  # dump the header
+
         header_length = len(self.worksheet['header'])
-        for line in data:
-            if line[0] not in self.worksheet['data']:
-                self.worksheet['data'][line[0]] = {}
-                line_length = len(line)
-                for item_ind in range(line_length):
-                    self.worksheet['data'][line[0]][self.worksheet['header'][item_ind]] = line[item_ind]
-                for item_ind in range(line_length, header_length):
-                    self.worksheet['data'][line[0]][self.worksheet['header'][item_ind]] = ''
-                if self.worksheet['data'][line[0]]['lat'] is '':
-                    self.worksheet['data'][line[0]]['lat'] = None
+        self.key_length = len(data[0][0])
+        for line_ind, line in enumerate(data):
+            if line[0] not in self.key_dic:
+                self.key_dic[line[0]] = list()
+            self.key_dic[line[0]].append([line_ind])
+            key = line[0]+'-'+str(line_ind)
+            self.worksheet['data'][key] = {}
+            line_length = len(line)
+            for item_ind in range(line_length):
+                self.worksheet['data'][key][self.worksheet['header'][item_ind]] = line[item_ind]
+            for item_ind in range(line_length, header_length):
+                self.worksheet['data'][key][self.worksheet['header'][item_ind]] = ''
+            if self.worksheet['data'][key]['lat'] is '':
+                self.worksheet['data'][key]['lat'] = None
 
     def get_coordinates(self):
         count = 0
-        for entry in self.worksheet['data'].values():
+        for key, entry in self.worksheet['data'].items():
+            # if max(self.key_dic[key[:self.key_length]]) != int(key[self.key_length+1:]):
             if entry['lat'] is None:
                 emergency_dump = get_coordinate(entry)
                 count += 1
@@ -64,9 +72,9 @@ class Archive(object):
 if __name__ == "__main__":
     # filenames = sys.argv
     # filenames.pop(0)
-    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/locations2.tsv']
-    filenames2 = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/locations.csv',
-                  'C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/genizah.locations.csv',
+    # filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/locations2.tsv']
+    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/locations.csv']
+    filenames2 = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/genizah.locations.csv',
                   'C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/non-heb-dates.csv']
 
     for filename in filenames:
