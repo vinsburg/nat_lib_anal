@@ -25,18 +25,22 @@ class UnidateRE:
 
 def fix_unidates(archive):
     for entry in archive.worksheet['data'].values():
-        if entry['unidate'] is None:
-            # self.worksheet['data'][entry['msID']] = fix_unidate(entry)
+        if entry['unidate'] is None and entry['unidate_range'] is None:
             fix_unidate(entry)
 
 
 def fix_unidate(entry):
+    date = None
     if entry['yearType'] == 'Year':
-        entry['unidate'] = get_year_unidates(entry)
+        date = get_year_unidates(entry)
     if entry['yearType'] == 'Century':
-        entry['unidate'] = get_century_unidates(entry)
+        date = get_century_unidates(entry)
     if entry['yearType'] == 'Shtarot':
-        entry['unidate'] = get_year_unidates(entry)
+        date = get_year_unidates(entry)
+    if entry['accuracyType'] == 'Range':
+        entry['unidate_range'] = date
+    else:
+        entry['unidate'] = date
     # if entry['unidate'] is None:
         # print_date_info(entry)
 
@@ -46,6 +50,8 @@ def get_year_unidates(entry):
     lat_year_date_list = date_getter(regex.general_lat_year_range, entry['latDate'])
     lat_year_date_list += date_getter(regex.general_lat_year_range, entry['hebDate'])
     # print(lat_year_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
+    if lat_year_date_list is '' or len(lat_year_date_list) > 1:
+        return None
     return ', '.join(lat_year_date_list)
 
 
@@ -57,6 +63,8 @@ def get_century_unidates(entry):
         # lat_century_date_list += date_getter(regex.lat_century_range, entry['hebDate'])
         lat_year_date_list = lat_cent2year(regex.lat_century, lat_century_date_list)
         # print(lat_year_date_list, lat_century_date_list, 'lat:',entry['latDate'], 'heb:', entry['hebDate'])
+    if lat_year_date_list is '' or len(lat_year_date_list) > 1:
+        return None
     return ', '.join(lat_year_date_list)
 
 
@@ -85,8 +93,9 @@ def get_shtarot_unidates(entry):
     regex = UnidateRE()
     lat_shtarot_date_list = date_getter(regex.general_lat_year_range, entry['latDate'])
     lat_shtarot_date_list += date_getter(regex.general_lat_year_range, entry['hebDate'])
-    if lat_shtarot_date_list is '':
+    if lat_shtarot_date_list is '' or len(lat_shtarot_date_list) > 1:
         return None
+
     return ', '.join(lat_shtarot_date_list)
 
 

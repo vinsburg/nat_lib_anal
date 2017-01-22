@@ -23,6 +23,4 @@ class Archive(object):
             for item_ind in range(line_length):
                 self.worksheet['data'][key][self.worksheet['header'][item_ind]] = line[item_ind]
             for item_ind in range(line_length, header_length):
-                self.worksheet['data'][key][self.worksheet['header'][item_ind]] = ''
-            if self.worksheet['data'][key]['lat'] is '':
-                self.worksheet['data'][key]['lat'] = None
+                self.worksheet['data'][key][self.worksheet['header'][item_ind]] = None

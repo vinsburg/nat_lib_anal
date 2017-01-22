@@ -22,7 +22,7 @@ def print_coverage_for_key(data,key):
     print(key_counter, 'entries out of', entry_counter, 'now conform.')
 
 
-def print_unidates(data):
+def print_items_for_key(data, key):
     for entry in data.values():
-        if entry['unidate'] is not None:
-            print(entry['unidate'])
+        if entry[key] is not None:
+            print(entry[key])

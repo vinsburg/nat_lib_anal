@@ -33,6 +33,8 @@ if __name__ == "__main__":
         print('referenceType', entries['referenceType'])
 
         print_coverage_for_key(archive.worksheet['data'], 'unidate')
-        print_unidates(archive.worksheet['data'])
+        print_items_for_key(archive.worksheet['data'], 'unidate')
+        print_coverage_for_key(archive.worksheet['data'], 'unidate_range')
+        print_items_for_key(archive.worksheet['data'], 'unidate_range')
         # print('\u05ea\u05ea\u05ea\u05f2\u05ea')
 
