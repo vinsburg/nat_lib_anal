@@ -23,6 +23,13 @@ class UnidateRE:
         return r'(' + date + self.range_delimiters + r')?' + date
 
 
+def fix_unidates(archive):
+    for entry in archive.worksheet['data'].values():
+        if entry['unidate'] is None:
+            # self.worksheet['data'][entry['msID']] = fix_unidate(entry)
+            fix_unidate(entry)
+
+
 def fix_unidate(entry):
     if entry['yearType'] == 'Year':
         entry['unidate'] = get_year_unidates(entry)
