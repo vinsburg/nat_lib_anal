@@ -102,7 +102,7 @@ def get_shtarot_unidates(entry):
     lat_shtarot_date_list += date_getter(regex.general_lat_year_range, entry['hebDate'])
     if lat_shtarot_date_list is '' or len(lat_shtarot_date_list) > 1:
         return None
-
+    #  prepare to fix ranges
     return ', '.join(lat_shtarot_date_list)
 
 
