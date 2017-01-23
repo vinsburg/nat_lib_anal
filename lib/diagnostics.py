@@ -23,9 +23,9 @@ def print_coverage_for_key(data,key):
 
 
 def print_items_for_key(data, key):
-    for entry in data.values():
+    for entry_key, entry in data.items():
         if entry[key] is not None:
-            print(entry[key])
+            print(entry[key], entry_key)
 
 
 def print_date_exceptions(data):
