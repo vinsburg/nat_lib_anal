@@ -26,3 +26,15 @@ def print_items_for_key(data, key):
     for entry in data.values():
         if entry[key] is not None:
             print(entry[key])
+
+
+def print_date_exceptions(data):
+    for entry in data.values():
+        f1 = entry['unidate'] != entry['latDate']
+        f2 = entry['unidate'] != entry['hebDate']
+        f3 = entry['unidate_range'] != entry['latDate']
+        f4 = entry['unidate_range'] != entry['hebDate']
+        f5 = entry['yearType'] != 'Century'
+        if f1 and f2 and f3 and f4 and f5:
+            unidate = entry['unidate'] if entry['unidate_range'] is None else entry['unidate_range']
+            print('|lat:', entry['latDate'], '|heb:', entry['hebDate'], '|unidate:', unidate)

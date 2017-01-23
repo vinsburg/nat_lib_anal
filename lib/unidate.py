@@ -5,8 +5,8 @@ from re import sub
 class UnidateRE:
     def __init__(self):
         self.range_delimiters = r'[\-/\\]'
-        self.lat_dmy_delimiters = r'\.\\/'
-        self.lat_day = self.lat_month = r'\d{1-2}'
+        self.lat_dmy_delimiters = r'[\.\\/]'
+        self.lat_day = self.lat_month = r'\d{1,2}'
         self.lat_century = r'\d{1,2}'
         self.lat_century_range = self.date_range(self.lat_century)
         self.lat_dates = ['' for _ in range(3)]
@@ -37,6 +37,8 @@ def fix_unidate(entry):
         date = get_century_unidates(entry)
     if entry['yearType'] == 'Shtarot':
         date = get_year_unidates(entry)
+    if date == '':
+        date = None
     if entry['accuracyType'] == 'Range':
         entry['unidate_range'] = date
     else:
