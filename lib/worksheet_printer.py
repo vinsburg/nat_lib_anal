@@ -13,6 +13,7 @@ def make_csv_object(worksheet):
         csv_object += [[]]
         for key in worksheet['header']:
             csv_object[current_row_index] += [entry[key]]
+    csv_object[1:] = list(sorted(csv_object[1:], key=lambda x: x[0], reverse=False))
     # print(csv_object[1])
     return csv_object
 

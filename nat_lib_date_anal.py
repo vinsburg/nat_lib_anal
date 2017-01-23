@@ -13,7 +13,7 @@ from lib.archive import *
 if __name__ == "__main__":
     # filenames = sys.argv
     # filenames.pop(0)
-    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/heb_dates.csv']
+    filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/heb_dates.tsv']
     for filename in filenames:
         print(filename)
         Header = get_header(filename)
@@ -32,9 +32,10 @@ if __name__ == "__main__":
         print('yearType', entries['yearType'])
         print('referenceType', entries['referenceType'])
 
-        print_coverage_for_key(archive.worksheet['data'], 'unidate')
-        print_items_for_key(archive.worksheet['data'], 'unidate')
-        print_coverage_for_key(archive.worksheet['data'], 'unidate_range')
-        print_items_for_key(archive.worksheet['data'], 'unidate_range')
+        # print_coverage_for_key(archive.worksheet['data'], 'unidate')
+        # print_items_for_key(archive.worksheet['data'], 'unidate')
+        # print_coverage_for_key(archive.worksheet['data'], 'unidate_range')
+        # print_items_for_key(archive.worksheet['data'], 'unidate_range')
+
         # print_date_exceptions(archive.worksheet['data'])
         # print('\u05ea\u05ea\u05ea\u05f2\u05ea')

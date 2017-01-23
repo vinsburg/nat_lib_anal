@@ -40,6 +40,14 @@ def fix_unidate(entry):
     if date == '':
         date = None
     if date is not None:
+        impossible_date = search(r'([3-9]\d{3})|(2[1-9]\d{2})|(20[1-9]\d)|(^-100$)', date)
+        if impossible_date:
+            return
+        slash_date = search(r'/', date)
+        if slash_date:
+            date = sub(r'/', r'-', date)
+            print(date)
+            entry['accuracyType'] = 'Range'
         hyphen_match = search(r'-', date)
         if entry['accuracyType'] == 'Range' and hyphen_match:
             entry['unidate_range'] = date
@@ -86,13 +94,8 @@ def date_getter(regex_pattern, date_string):
 
 def lat_cent2year(regex_pattern, century_date_list):
     year_date_list = list()
-    ind = 0
     for item in century_date_list:
         year_date_list.append(sub(regex_pattern, lambda x: str((int(x.group(0)) - 1) * 100), item))
-        impossible_date = search(r'[2-9]1\d{2}', year_date_list[ind])
-        if impossible_date:
-            return None
-        ind += 1
     return year_date_list
 
 
