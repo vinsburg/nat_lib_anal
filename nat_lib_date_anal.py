@@ -31,7 +31,8 @@ if __name__ == "__main__":
         print('accuracyType', entries['accuracyType'])
         print('yearType', entries['yearType'])
         print('referenceType', entries['referenceType'])
-
+        exception_sheet = get_date_exceptions_worksheet(archive.worksheet)
+        serialize(exception_sheet, output="csv")
         # print_coverage_for_key(archive.worksheet['data'], 'unidate')
         # print_items_for_key(archive.worksheet['data'], 'unidate')
         # print_coverage_for_key(archive.worksheet['data'], 'unidate_range')

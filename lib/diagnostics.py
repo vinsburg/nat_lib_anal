@@ -40,5 +40,14 @@ def print_date_exceptions(data):
             print('|lat:', entry['latDate'], '|heb:', entry['hebDate'], '|unidate:', unidate)
 
 
-def get_date_exceptions_worksheet(data):
-    pass
+def get_date_exceptions_worksheet(worksheet):
+    exception_sheet = dict()
+    exception_sheet['header'] = worksheet['header']
+    exception_sheet['data'] = {}
+    for key, value in worksheet['data'].items():
+        if value['unidate'] is None and value['unidate_range'] is None:
+            exception_sheet['data'][key] = value
+    path = worksheet['file_name'].split('/')
+    path[len(path)-1] = 'exceptions_' + path[len(path)-1]
+    exception_sheet['file_name'] = "/".join(path)
+    return exception_sheet

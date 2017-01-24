@@ -46,10 +46,9 @@ def fix_unidate(entry):
         slash_date = search(r'/', date)
         if slash_date:
             date = sub(r'/', r'-', date)
-            print(date)
-            entry['accuracyType'] = 'Range'
+            entry['unidate_range'] = 1
         hyphen_match = search(r'-', date)
-        if entry['accuracyType'] == 'Range' and hyphen_match:
+        if (entry['accuracyType'] == 'Range' and hyphen_match) or entry['unidate_range'] == 1:
             entry['unidate_range'] = date
         else:
             entry['unidate'] = date
