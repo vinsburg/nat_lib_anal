@@ -44,3 +44,16 @@ def get_coordinate(entry):
         entry['lon'] = location.longitude
         entry['address'] = location.address
     return False
+
+def get_geo_facet_dict(data):
+    geo_dict = {}
+    for entry in data.values():
+        key = ''
+        if entry['Country'] != '':
+            key = ' '.join((entry['City'].strip(), entry['Area'].strip(), entry['Country'].strip()))
+        elif entry['HebCity'] != '':
+            key = ' '.join((entry['HebCity'].strip(), entry['HebCountry'].strip()))
+        elif entry['City'] != '':
+            key = entry['City'].strip()
+        geo_dict[key] = [entry['City'], entry['Area'], entry['Country'], entry['HebCity'], entry['HebCountry']]
+    return geo_dict
