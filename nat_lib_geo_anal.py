@@ -47,4 +47,4 @@ if __name__ == "__main__":
         #     print(value)
 
         # archive.get_coordinates()
-        # print_coverage_for_key(archive.worksheet['data'], 'lat')
+        print_coverage_for_locations(archive.worksheet['data'], 'uri_matched')

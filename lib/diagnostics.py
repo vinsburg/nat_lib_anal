@@ -51,3 +51,14 @@ def get_date_exceptions_worksheet(worksheet):
     path[len(path)-1] = 'exceptions_' + path[len(path)-1]
     exception_sheet['file_name'] = "/".join(path)
     return exception_sheet
+
+
+def print_coverage_for_locations(data, key):
+    key_counter = 0
+    entry_counter = 0
+    for entry in data.values():
+        entry_counter += 1
+        if entry[key] is not 'False':
+            key_counter += 1
+    print(key, 'coverage is', '{:.1%}'.format(key_counter/entry_counter))
+    print(key_counter, 'entries out of', entry_counter, 'now conform.')
