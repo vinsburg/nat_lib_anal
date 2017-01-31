@@ -45,15 +45,40 @@ def get_coordinate(entry):
         entry['address'] = location.address
     return False
 
+
 def get_geo_facet_dict(data):
     geo_dict = {}
     for entry in data.values():
+        sep = '.'
         key = ''
         if entry['Country'] != '':
-            key = ' '.join((entry['City'].strip(), entry['Area'].strip(), entry['Country'].strip()))
+            if entry['Area'] == '':
+                key = sep.join((entry['City'].strip(), entry['Country'].strip()))
+            else:
+                key = sep.join((entry['City'].strip(), entry['Area'].strip(), entry['Country'].strip()))
         elif entry['HebCity'] != '':
-            key = ' '.join((entry['HebCity'].strip(), entry['HebCountry'].strip()))
+            key = sep.join((entry['HebCity'].strip(), entry['HebCountry'].strip()))
         elif entry['City'] != '':
             key = entry['City'].strip()
-        geo_dict[key] = [entry['City'], entry['Area'], entry['Country'], entry['HebCity'], entry['HebCountry']]
+        key = key.strip('.')
+        geo_dict[key] = [key, entry['City'], entry['Area'], entry['Country'], entry['HebCity'], entry['HebCountry']]
+        entry['local_uri'] = key
     return geo_dict
+
+
+def check_uris(dic_data, data):
+    for value in data.values():
+        if value['local_uri'] in dic_data:
+            value['uri_matched'] = 'True'
+        else:
+            value['uri_matched'] = 'False'
+
+
+def get_exceptions_geo_facet_dict(data):
+    geo_dict = {}
+    for entry in data.values():
+        if entry['uri_matched'] == 'False':
+            geo_dict[entry['local_uri']] = entry
+    worksheet = dict()
+    worksheet['data'] = geo_dict
+    return worksheet

@@ -11,7 +11,7 @@ def get_date_types(worksheet):
     return field_entries
 
 
-def print_coverage_for_key(data,key):
+def print_coverage_for_key(data, key):
     key_counter = 0
     entry_counter = 0
     for entry in data.values():
