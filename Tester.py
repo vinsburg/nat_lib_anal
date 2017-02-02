@@ -16,6 +16,12 @@ from lib.archive import *
 if __name__ == "__main__":
     # filenames = sys.argv
     # filenames.pop(0)
+    loc_dic = 'C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/msLocations.tsv'
+    dHeader = get_header(loc_dic)
+    dData = get_data(loc_dic)
+    dic = Archive(loc_dic, dHeader, dData)
+    dic.clean_keys()
+    
     filenames = ['C:/Users/vinsburg/Documents/github/nat_lib_anal/database/dropbox_files/locations.tsv']
     for filename in filenames:
         print(filename)
