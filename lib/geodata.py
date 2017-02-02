@@ -82,3 +82,19 @@ def get_exceptions_geo_facet_dict(data):
     worksheet = dict()
     worksheet['data'] = geo_dict
     return worksheet
+
+def get_nominatim_data(city, country):
+    geolocator = Nominatim()
+    while True:
+        try:
+            if city is not '' or country is not '':
+                location = geolocator.geocode(' '.join((city, country)))
+                sleep(1)
+            else:
+                location = None
+            break
+        except exc.GeocoderServiceError:
+            return True, True, True
+    if location is not None:
+        return location.longitude, location.latitude, location.address
+    return False, False, False
