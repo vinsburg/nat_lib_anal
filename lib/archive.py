@@ -19,7 +19,7 @@ class Archive(object):
             self.key_dic[line[0]].append([line_ind])
             key = line[0]+'-'+str(line_ind)
             self.worksheet['data'][key] = {}
-            line_length = len(line)
+            line_length = min(len(line), header_length)
             for item_ind in range(line_length):
                 self.worksheet['data'][key][self.worksheet['header'][item_ind]] = line[item_ind]
             for item_ind in range(line_length, header_length):
